@@ -1,99 +1,177 @@
 import SwiftUI
+import AuthenticationServices
 
-struct ResourcesView: View {
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                ResourceSection(
-                    title: "University Health Services (UHS)",
-                    website: "studentaffairs.psu.edu/health",
-                    phone: "814-865-4UHS (4847)"
-                )
-                
-                ResourceSection(
-                    title: "Health Promotion & Wellness",
-                    website: "studentaffairs.psu.edu/health-promotion",
-                    phone: "814-863-0461"
-                )
-                
-                ResourceSection(
-                    title: "Counseling & Psychological Services (CAPS)",
-                    website: "studentaffairs.psu.edu/counseling",
-                    phone: "814-863-0395"
-                )
-                
-                ResourceSection(
-                    title: "Crisis Services (24/7)",
-                    phone: "877-229-6400"
-                )
-                
-                ResourceSection(
-                    title: "Crisis Text Line",
-                    description: "Text \"LIONS\" to 741741"
-                )
-                
-                ResourceSection(
-                    title: "Campus Recreation",
-                    website: "studentaffairs.psu.edu/campusrec",
-                    phone: "814-867-1600"
-                )
-                
-                ResourceSection(
-                    title: "Penn State Learning",
-                    website: "pennstatelearning.psu.edu/",
-                    phone: "814-865-2582"
-                )
-            }
-            .padding()
-        }
-        .navigationTitle("Resources")
-    }
-}
-
-struct ResourceSection: View {
-    let title: String
-    var website: String?
-    var phone: String?
-    var description: String?
+struct LoginView: View {
+    @State private var email: String = ""
+    @State private var password: String = ""
+    @State private var isLoading: Bool = false
+    @State private var showError: Bool = false
+    @State private var errorMessage: String = ""
+    
+    // MARK: - Authentication Manager
+    @StateObject private var authManager = AuthenticationManager()
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.headline)
-                .foregroundColor(Color.purple)
+        ZStack {
+            // Background
+            Color("BackgroundColor")
+                .ignoresSafeArea()
             
-            if let website = website {
-                Link(destination: URL(string: "https://\(website)")!) {
-                    Text(website)
-                        .foregroundColor(Color.blue)
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Logo and App Name
+                    Image("lionwell-logo") // Add your logo asset
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 100)
+                    
+                    Text("LionWell")
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(.primary)
+                    
+                    // Input Fields
+                    VStack(spacing: 16) {
+                        TextField("Email", text: $email)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .autocapitalization(.none)
+                            .keyboardType(.emailAddress)
+                        
+                        SecureField("Password", text: $password)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
+                    .padding(.horizontal, 32)
+                    
+                    // Login Button
+                    Button(action: performLogin) {
+                        if isLoading {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        } else {
+                            Text("Login")
+                                .fontWeight(.semibold)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 32)
+                    .disabled(isLoading)
+                    
+                    // Microsoft SSO Button
+                    Button(action: performMicrosoftLogin) {
+                        HStack {
+                            Image(systemName: "person.circle.fill")
+                            Text("Sign in with Penn State")
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .foregroundColor(.primary)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 32)
+                    
+                    // Forgot Password Link
+                    Button(action: forgotPassword) {
+                        Text("Forgot Password?")
+                            .foregroundColor(.blue)
+                    }
+                    
+                    // Sign Up Option
+                    HStack {
+                        Text("Don't have an account?")
+                        Button(action: navigateToSignUp) {
+                            Text("Sign Up")
+                                .fontWeight(.semibold)
+                                .foregroundColor(.blue)
+                        }
+                    }
                 }
-            }
-            
-            if let phone = phone {
-                Link(destination: URL(string: "tel:\(phone.filter { $0.isNumber })")!) {
-                    Text(phone)
-                        .foregroundColor(Color.orange)
-                }
-            }
-            
-            if let description = description {
-                Text(description)
-                    .foregroundColor(Color.pink)
+                .padding(.vertical, 32)
             }
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white)
-                .shadow(color: Color.black.opacity(0.1), radius: 5)
-        )
+        .alert(isPresented: $showError) {
+            Alert(
+                title: Text("Error"),
+                message: Text(errorMessage),
+                dismissButton: .default(Text("OK"))
+            )
+        }
+    }
+    
+    // MARK: - Actions
+    
+    private func performLogin() {
+        guard validateInputs() else { return }
+        
+        isLoading = true
+        
+        // Simulate network request
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            isLoading = false
+            // Add your actual login logic here
+        }
+    }
+    
+    private func performMicrosoftLogin() {
+        isLoading = true
+        authManager.signInWithMicrosoft { result in
+            isLoading = false
+            switch result {
+            case .success:
+                // Handle successful login
+                break
+            case .failure(let error):
+                showError = true
+                errorMessage = error.localizedDescription
+            }
+        }
+    }
+    
+    private func validateInputs() -> Bool {
+        if email.isEmpty || password.isEmpty {
+            errorMessage = "Please fill in all fields"
+            showError = true
+            return false
+        }
+        
+        if !isValidEmail(email) {
+            errorMessage = "Please enter a valid email address"
+            showError = true
+            return false
+        }
+        
+        return true
+    }
+    
+    private func isValidEmail(_ email: String) -> Bool {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailRegex)
+        return emailPredicate.evaluate(with: email)
+    }
+    
+    private func forgotPassword() {
+        // Implement forgot password logic
+    }
+    
+    private func navigateToSignUp() {
+        // Implement navigation to sign up page
     }
 }
 
-struct ResourcesView_Previews: PreviewProvider {
+// MARK: - Authentication Manager
+class AuthenticationManager: ObservableObject {
+    func signInWithMicrosoft(completion: @escaping (Result<Void, Error>) -> Void) {
+        // Implement Microsoft authentication using Penn State credentials
+        // You'll need to set up Azure AD authentication and use appropriate SDK
+        // Example implementation would use MSAL (Microsoft Authentication Library)
+    }
+}
+
+struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            ResourcesView()
-        }
+        LoginView()
     }
 }
