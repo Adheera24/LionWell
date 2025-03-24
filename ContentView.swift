@@ -7,13 +7,11 @@
 
 import SwiftUI
 
-
 struct HomeScreen: View {
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
-                    Text("DEBUG: HomeScreen Loaded!")
                     
                     // Header Section
                     ZStack {
@@ -26,9 +24,9 @@ struct HomeScreen: View {
                                 .font(.system(size: 32, weight: .bold))
                                 .foregroundColor(.white)
                             
-                            Text("Your AI-Powered Health Journey")
-                                .font(.system(size: 16))
-                                .foregroundColor(.red.opacity(0.9))
+                            //Text("Your AI-Powered Health Journey")
+                                //.font(.system(size: 16))
+                                //.foregroundColor(.red.opacity(0.9))
                         }
                     }
                     
@@ -39,30 +37,30 @@ struct HomeScreen: View {
                             .foregroundColor(Color.purple)
                             .multilineTextAlignment(.center)
                         
-                        Text("We analyze your health data to create custom wellness plans just for you")
-                            .font(.system(size: 16))
-                            .foregroundColor(Color.green)
-                            .multilineTextAlignment(.center)
-                            .lineSpacing(8)
-                            .padding(.horizontal)
+                       // Text("We analyze your health data to create custom wellness plans just for you")
+                            //.font(.system(size: 16))
+                           // .foregroundColor(Color.green)
+                            //.multilineTextAlignment(.center)
+                           // .lineSpacing(8)
+                           // .padding(.horizontal)
                     }
                     .padding(20)
                     
-                    NavigationLink(destination: ResourcesView()) {
-                                            Text("Go to Resources")
-                                                .font(.headline)
-                                                .padding()
-                                                .background(Color.green)
-                                                .foregroundColor(.white)
-                                                .cornerRadius(8)
-                                        }
-                                        .padding() // Adjust the padding to suit your layout
-                                        
-                                        Spacer()
-                                    }
+                    // Updated NavigationLink to point to LoginView
+                    NavigationLink(destination: LoginView()) { // Ensure LoginView is capitalized
+                        Text("Go to Login")
+                            .font(.headline)
+                            .padding()
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
+                    .padding() // Adjust the padding to suit your layout
+                    
+                    Spacer()
                 }
-                .frame(maxHeight: .infinity) // Ensures the content expands
             }
+            .frame(maxHeight: .infinity) // Ensures the content expands
             .background(Color.white)
             .edgesIgnoringSafeArea(.top)
         }
@@ -73,5 +71,7 @@ struct HomeScreen: View {
             HomeScreen()
         }
     }
+}
+
     
 
