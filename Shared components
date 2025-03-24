@@ -1,0 +1,39 @@
+//
+//  SharedComponents.swift
+//  LionWell real
+//
+//  Created by Adheera Chilamkurthi on 3/6/25.
+//
+import SwiftUI
+
+struct ResourceSection: View {
+    var title: String
+    var website: String?
+    var phone: String?
+    var description: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.headline)
+            if let website = website {
+                Text("Website: \(website)")
+                    .font(.subheadline)
+                    .foregroundColor(.blue)
+            }
+            if let phone = phone {
+                Text("Phone: \(phone)")
+                    .font(.subheadline)
+            }
+            if let description = description {
+                Text(description)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(8)
+        .shadow(color: Color.black.opacity(0.1), radius: 4)
+    }
+}
