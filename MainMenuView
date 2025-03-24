@@ -1,0 +1,70 @@
+//
+//  MainMenuView.swift
+//  LionWell real
+//
+//  Created by Adheera Chilamkurthi on 3/23/25.
+//
+import SwiftUI
+
+struct MainMenuView: View {
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 40) {
+                Text("Main Menu")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+
+                HStack {
+                    NavigationLink(destination: CheckInView()) {
+                        VStack {
+                            Image(systemName: "gamecontroller")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                            Text("Gamification")
+                        }
+                    }
+                    .padding()
+
+                    NavigationLink(destination: HealthChatView()) {
+                        VStack {
+                            Image(systemName: "message")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                            Text("Health Chat")
+                        }
+                    }
+                    .padding()
+                }
+
+                HStack {
+                    NavigationLink(destination: ResourcesView()) {
+                        VStack {
+                            Image(systemName: "book")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                            Text("Resources")
+                        }
+                    }
+                    .padding()
+
+                    NavigationLink(destination: UserProfileView()) {
+                        VStack {
+                            Image(systemName: "person")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                            Text("Profile")
+                        }
+                    }
+                    .padding()
+                }
+            }
+            .navigationTitle("Main Menu")
+        }
+    }
+}
+
+struct MainMenuView_Previews: PreviewProvider {
+    static var previews: some View {
+        MainMenuView()
+    }
+}
