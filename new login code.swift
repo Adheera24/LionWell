@@ -13,7 +13,7 @@ struct LoginView: View {
     @State private var showError: Bool = false
     @State private var errorMessage: String = ""
     @State private var isSignUpPresented: Bool = false
-    @State private var navigateToCheckIn: Bool = false // Track navigation status
+    @State private var navigateToMainMenu: Bool = false // Track navigation status
 
     var body: some View {
         NavigationView {
@@ -56,8 +56,8 @@ struct LoginView: View {
                         .padding()
                 }
 
-                // Navigation Link to CheckInView
-                NavigationLink(destination: CheckInView(), isActive: $navigateToCheckIn) {
+                // Navigation Link to MainMenuView
+                NavigationLink(destination: MainMenuView(), isActive: $navigateToMainMenu) {
                     EmptyView()
                 }
             }
@@ -77,8 +77,8 @@ struct LoginView: View {
         let storedPassword = UserDefaults.standard.string(forKey: "userPassword") ?? ""
 
         if email == storedEmail && password == storedPassword {
-            // Update navigation status to go to CheckInView
-            navigateToCheckIn = true
+            // Update navigation status to go to MainMenuView
+            navigateToMainMenu = true
         } else {
             errorMessage = "Invalid email or password"
             showError = true
@@ -179,3 +179,4 @@ struct LoginView_Previews: PreviewProvider {
         LoginView()
     }
 }
+
