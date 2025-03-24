@@ -1,0 +1,34 @@
+//
+//  UserProfileView.swift
+//  LionWell real
+//
+//  Created by Adheera Chilamkurthi on 3/23/25.
+//
+import SwiftUI
+
+struct UserProfileView: View {
+    var body: some View {
+        VStack {
+            Text("User  Profile")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+            
+            // Add user profile details here
+            Text("Name: Adheera Chilamkurthi")
+                .font(.headline)
+            Text("Email: apc6491@psu.edu")
+                .font(.headline)
+            
+            // You can add more user details as needed
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Profile")
+    }
+}
+
+struct UserProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        UserProfileView()
+    }
+}
