@@ -5,6 +5,7 @@
 //  Created by Adheera Chilamkurthi on 3/11/25.
 import SwiftUI
 
+// Gamification Code
 struct CheckInQuestion {
     let question: String
     let options: [String]
@@ -145,6 +146,17 @@ struct CheckInView: View {
                                 .background(Color.orange)
                                 .cornerRadius(12)
                         }
+                        
+                        // Navigation Link to HealthChatView
+                        NavigationLink(destination: HealthChatView()) {
+                            Text("Go to Health Chat")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.blue)
+                                .cornerRadius(12)
+                        }
                     }
                 }
             }
@@ -160,13 +172,13 @@ struct CheckInView: View {
 struct LeaderboardView: View {
     // Create a sample leaderboard with specific names for the top 5 ranks
     let rankings: [(Int, String)] = [
-        (1, "User   1001"),
-        (2, "User   1002"),
-        (3, "User   1003"),
-        (4, "User   1004"),
-        (5, "User   1005")
+        (1, "User     1001"),
+        (2, "User     1002"),
+        (3, "User     1003"),
+        (4, "User     1004"),
+        (5, "User     1005")
     ] + (6...50).map { rank -> (Int, String) in
-        let name = "User   \(Int.random(in: 1000...9999))"
+        let name = "User     \(Int.random(in: 1000...9999))"
         return (rank, name)
     }
     
@@ -195,8 +207,3 @@ struct LeaderboardView: View {
     }
 }
 
-struct ContentView: View {
-    var body: some View {
-        CheckInView()
-    }
-}
